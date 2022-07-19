@@ -1,3 +1,4 @@
+const e = require('express');
 const knex = require('../databases/knex');
 const fieldValidator = require('../utils/FieldValidator');
 
@@ -25,4 +26,17 @@ exports.create = async (req, res) => {
   } catch (e) {
     return res.status(500).send({ error: e.message || e });
   }
+}
+
+
+exports.find = async (req, res) => {
+ try {
+  const courses = await knex.select('*').from('courses')
+
+  return res.status(200).send({
+    courses: courses
+  })
+ } catch (e) {
+  return res.status(500).send({error: e.message || e})
+ }
 }
