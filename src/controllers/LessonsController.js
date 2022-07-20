@@ -97,26 +97,31 @@ exports.find = async (req, res) => {
     .where({id})
     .first()
 
-    const instructorId = lesson.instructorId
-    console.log(instructorId)
+
     if (!lesson){
       return res.status(404).send(`a lição com o id ${id} não foi encontrada`)
     }
- 
+
+     
     const instructor = await knex.select('*')
     .from('instructors')
-    .where({id: instructorId}).first()
+    .where({id: lesson.instructorId}).first()
 
-    return res.status(200).send(
-      ...lesson, // Manda todos os atributos do obj
+    delete lesson.instructorId
+    delete lesson.courseId
+
+    delete instructor.id
+
+    if (!instructor.avatarUrl){
+        instructor.avatarUrl = "https://avatars.dicebear.com/api/bottts/your-custom-seed.svg"
+    }
+
+    return res.status(200).send({
+      ...lesson, 
       instructor
-    )
+    })
 
-   return res.status(200).send({
-    lessons: lessons
-   })
   } catch (e) {
    return res.status(500).send({error: e.message || e})
   }
- }
- 
+ } 
