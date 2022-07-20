@@ -11,6 +11,8 @@ routes.get('/', IndexController.index);
 // rotas de cursos
 routes.post('/courses', CoursesController.create);
 routes.get('/courses', CoursesController.find);
+routes.get('/courses/:id', CoursesController.findById);
+routes.update//('/courses', CoursesController.update);
 
 routes.post('/instructors', InstructorsController.create);
 
