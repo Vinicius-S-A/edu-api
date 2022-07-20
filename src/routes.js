@@ -14,9 +14,14 @@ routes.get('/courses', CoursesController.find);
 routes.get('/courses/:id', CoursesController.findById);
 routes.update//('/courses', CoursesController.update);
 
+//rotas de instrutores
 routes.post('/instructors', InstructorsController.create);
 
+
+//rotas de lições
 routes.post('/lessons', LessonsController.create);
+routes.get('/lessons', LessonsController.find);
+routes.get('/lessons/:id', LessonsController.findById);
 
 module.exports = routes;
 

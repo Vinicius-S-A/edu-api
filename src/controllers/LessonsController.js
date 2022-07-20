@@ -76,3 +76,47 @@ exports.create = async (req, res) => {
     return res.status(500).send({ error: e.message || e });
   }
 }
+
+exports.find = async (req, res) => {
+  try {
+   const lessons = await knex.select('*').from('lessons')
+ 
+   return res.status(200).send({
+    lessons: lessons
+   })
+  } catch (e) {
+   return res.status(500).send({error: e.message || e})
+  }
+ }
+ 
+ exports.findById = async (req, res) => {
+  try {
+    const id = req.params.id
+    const lesson = await knex.select('*')
+    .from('lessons')
+    .where({id})
+    .first()
+
+    const instructorId = lesson.instructorId
+    console.log(instructorId)
+    if (!lesson){
+      return res.status(404).send(`a lição com o id ${id} não foi encontrada`)
+    }
+ 
+    const instructor = await knex.select('*')
+    .from('instructors')
+    .where({id: instructorId}).first()
+
+    return res.status(200).send(
+      ...lesson, // Manda todos os atributos do obj
+      instructor
+    )
+
+   return res.status(200).send({
+    lessons: lessons
+   })
+  } catch (e) {
+   return res.status(500).send({error: e.message || e})
+  }
+ }
+ 
