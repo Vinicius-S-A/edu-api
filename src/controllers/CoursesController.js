@@ -56,10 +56,10 @@ exports.findById = async (req, res) => {
     const lessons = await knex.select('*')
     .from('lessons')
     .where({courseId: id})
-    return res.status(200).send(
+    return res.status(200).send({
       ...course, // Manda todos os atributos do obj
       lessons,
-    )
+    })
 
     
 
