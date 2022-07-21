@@ -113,7 +113,7 @@ exports.find = async (req, res) => {
     delete instructor.id
 
     if (!instructor.avatarUrl){
-        instructor.avatarUrl = "https://avatars.dicebear.com/api/bottts/your-custom-seed.svg"
+        instructor.avatarUrl = "https://avatars.githubusercontent.com/u/53912936?v=4"
     }
 
     return res.status(200).send({
@@ -125,3 +125,65 @@ exports.find = async (req, res) => {
    return res.status(500).send({error: e.message || e})
   }
  } 
+
+ exports.update = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const newLesson = req.body;
+
+    const lesson = await knex
+      .select('*')
+      .from('lessons')
+      .where({ id })
+      .first();
+
+    if (!lesson) {
+      return res.status(404).send({
+        status: `Nenhuma lição ${id} foi encontrado`
+      });
+    }
+    
+    await knex
+      .update(newLesson)
+      .from('lessons')
+      .where({ id });
+
+    const lessonUpdt = await knex
+      .select('*')
+      .from('lessons')
+      .where({ id })
+      .first();
+
+    return res.status(200).send(lessonUpdt);
+  } catch (e) {
+    return res.status(500).send({ error: e.message || e });
+  }
+}
+
+exports.delete = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const delLesson = req.body;
+
+    const lesson = await knex
+      .select('*')
+      .from('lessons')
+      .where({ id })
+      .first();
+
+    if (!lesson) {
+      return res.status(404).send({
+        status: `Nenhuma lição ${id} foi encontrado`
+      });
+    }
+    
+    await knex
+      .delete(delLesson)
+      .from('lessons')
+      .where({ id });
+
+    return res.status(200).send(`lição ${id} deletada com sucesso`);
+  } catch (e) {
+    return res.status(500).send({ error: e.message || e });
+  }
+}

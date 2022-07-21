@@ -67,3 +67,65 @@ exports.findById = async (req, res) => {
    return res.status(500).send({error: e.message || e})
   }
  }
+
+ exports.update = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const newCourse = req.body;
+
+    const course = await knex
+      .select('*')
+      .from('courses')
+      .where({ id })
+      .first();
+
+    if (!course) {
+      return res.status(404).send({
+        status: `Nenhum curso ${id} foi encontrado`
+      });
+    }
+    
+    await knex
+      .update(newCourse)
+      .from('courses')
+      .where({ id });
+
+    const courseUpdated = await knex
+      .select('*')
+      .from('courses')
+      .where({ id })
+      .first();
+
+    return res.status(200).send(courseUpdated);
+  } catch (e) {
+    return res.status(500).send({ error: e.message || e });
+  }
+}
+
+exports.delete = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const delCourse = req.body;
+
+    const course = await knex
+      .select('*')
+      .from('courses')
+      .where({ id })
+      .first();
+
+    if (!course) {
+      return res.status(404).send({
+        status: `Nenhum curso ${id} foi encontrado`
+      });
+    }
+    
+    await knex
+      .delete(delCourse)
+      .from('courses')
+      .where({ id });
+
+    return res.status(200).send(`curso ${id} deletado com sucesso`);
+  } catch (e) {
+    return res.status(500).send({ error: e.message || e });
+  }
+}
