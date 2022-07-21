@@ -154,7 +154,9 @@ exports.find = async (req, res) => {
       .where({ id })
       .first();
 
-    return res.status(200).send(lessonUpdt);
+    return res.status(200).send({
+      data: 'Operação sucedida',
+      lessonUpdt});
   } catch (e) {
     return res.status(500).send({ error: e.message || e });
   }
@@ -182,7 +184,7 @@ exports.delete = async (req, res) => {
       .from('lessons')
       .where({ id });
 
-    return res.status(200).send(`lição ${id} deletada com sucesso`);
+    return res.status(204).send({ status: `lição ${id} deletada com sucesso`});
   } catch (e) {
     return res.status(500).send({ error: e.message || e });
   }
